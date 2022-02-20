@@ -1,9 +1,11 @@
-import logo from './logo.svg';
-import './App.css';
+import { createTheme } from '@material-ui/core';
+import React from 'react'
+import Drawer from './pages/Drawer';
 
 function App() {
   return (
-    <div className="App">
+    <div>
+      <Drawer />
     </div>
   );
 }
