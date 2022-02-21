@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import AppBar from '@material-ui/core/AppBar';
 import CssBaseline from '@material-ui/core/CssBaseline';
 import Drawer from '@material-ui/core/Drawer';
@@ -16,8 +16,11 @@ import HomeIcon from '@material-ui/icons/Home';
 import PeopleIcon from '@material-ui/icons/People';
 import EventIcon from '@material-ui/icons/Event';
 import AccountCircle from '@material-ui/icons/AccountCircle';
-import { Box } from '@material-ui/core';
+import { Box, Grid, Paper } from '@material-ui/core';
 import CardItem from '../components/CardItem';
+import { useSelector, useDispatch } from 'react-redux';
+import { fetchUsers } from '../store/actions';
+import Button from '@material-ui/core/Button';
 
 const drawerWidth = 240;
 
@@ -59,6 +62,19 @@ function ResponsiveDrawer(props) {
   const classes = useStyles();
   const theme = useTheme();
   const [mobileOpen, setMobileOpen] = React.useState(false);
+  const users = useSelector(state => state.users)
+  const dispatch = useDispatch()
+
+  useEffect(() => {
+    dispatch(fetchUsers())
+  },[dispatch])
+
+  function handleNextPage() {
+    dispatch(fetchUsers())
+  }
+  function handlePrevPage() {
+    dispatch(fetchUsers())
+  }
 
   const handleDrawerToggle = () => {
     setMobileOpen(!mobileOpen);
@@ -149,7 +165,47 @@ function ResponsiveDrawer(props) {
       </nav>
       <main className={classes.content}>
         <div className={classes.toolbar} />
-        <CardItem />
+        <Paper p={2} style={{ padding: '2rem'}}>
+          <Box display="flex">
+            <Box flexGrow={1}>
+              <Typography color='secondary' style={{ fontWeight: 'bold', fontSize: '1.5rem'}} >
+                Personnel List
+              </Typography>
+            </Box>
+            <Box>
+              <Button variant="contained" color="secondary">
+                add personnel
+              </Button>
+            </Box>
+          </Box>
+        </Paper>
+        <Grid container spacing={2} style={{marginTop: '1rem'}}>
+          {
+            users.map((user, i) => {
+              return (
+                <Grid item xs={12} sm={3} key={i}>
+                  <CardItem user={user}/>
+                </Grid>
+              ) 
+            })
+          }
+        </Grid>
+        <Box display="flex" justifyContent="center" m={2}>
+          <Box m={2}>
+            <Button onClick={handlePrevPage}>
+              <Typography color="primary">
+                Previous page
+              </Typography>
+            </Button>
+          </Box>
+          <Box m={2}>
+            <Button onClick={handleNextPage}>
+              <Typography color="primary">
+                Next page
+              </Typography>
+            </Button>
+          </Box>
+        </Box>
       </main>
     </div>
   );

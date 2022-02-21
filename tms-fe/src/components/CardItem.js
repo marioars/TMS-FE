@@ -4,10 +4,8 @@ import Card from '@material-ui/core/Card';
 import CardHeader from '@material-ui/core/CardHeader';
 import CardMedia from '@material-ui/core/CardMedia';
 import CardContent from '@material-ui/core/CardContent';
-import Box from '@material-ui/core/Box';
 import IconButton from '@material-ui/core/IconButton';
 import Typography from '@material-ui/core/Typography';
-import { red } from '@material-ui/core/colors';
 import MoreHorizIcon from '@material-ui/icons/MoreHoriz';
 import Divider from '@material-ui/core/Divider';
 
@@ -21,7 +19,13 @@ const useStyles = makeStyles(() => ({
   }
 }));
 
-export default function CardItem() {
+const bodFormatted = (input) => {
+  const result = input.split('T')[0]
+  return result
+}
+
+export default function CardItem(props) {
+  const { user } = props
   const classes = useStyles();
 
   return (
@@ -32,13 +36,14 @@ export default function CardItem() {
             <MoreHorizIcon />
           </IconButton>
         }
-        // title="Personnel ID"
-        subheader="September 14, 2016"
+        title="Personnel ID"
+        subheader={`${user.id.value}`}
       />
       <Divider />
+      {/* <Avatar alt="avatar" src={user.picture.large} /> */}
       <CardMedia
         className={classes.media}
-        image="/static/images/cards/paella.jpg"
+        image={`${user.picture.large}`}
         title="Paella dish"
       />
       <CardContent>
@@ -46,25 +51,25 @@ export default function CardItem() {
           Name
         </Typography>
         <Typography variant="body1" color="primary" style={{ marginBottom: '1rem' }}>
-          FirstName LastName
+          {user.name.first} {user.name.last}
         </Typography>
         <Typography variant="body1" color="primary" style={{ fontWeight: 'bold' }}>
           Telephone
         </Typography>
         <Typography variant="body1" color="primary" style={{ marginBottom: '1rem' }}>
-          Phone Number
+          {user.phone}
         </Typography>
         <Typography variant="body1" color="primary" style={{ fontWeight: 'bold' }}>
           Birthday
         </Typography>
         <Typography variant="body1" color="primary" style={{ marginBottom: '1rem' }}>
-          DD-MM
+          {bodFormatted(user.dob.date)}
         </Typography>
         <Typography variant="body1" color="primary" style={{ fontWeight: 'bold' }}>
           Email
         </Typography>
         <Typography variant="body1" color="primary" style={{ marginBottom: '1rem' }}>
-          Email Address
+          {user.email}
         </Typography>
       </CardContent>
     </Card>
