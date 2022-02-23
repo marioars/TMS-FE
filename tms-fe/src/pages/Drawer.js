@@ -70,7 +70,8 @@ function ResponsiveDrawer(props) {
   const [data, setData] = useState([])
   const [perPage] = useState(4)
   const [pageCount, setPageCount] = useState(0)
-  
+  const [loading, setLoading] = useState(true)
+
   const dataUser = () => {
     const slice = users.slice(offset, offset + perPage)
     const postData = slice
@@ -83,8 +84,12 @@ function ResponsiveDrawer(props) {
   };
 
   useEffect(() => {
-    dispatch(fetchUsers())
-  },[dispatch])
+    if(data.length === 0) {
+      dispatch(fetchUsers())
+      dataUser()
+    }
+    setLoading(false)
+  },[users])
 
   useEffect(() => {
     dataUser()
@@ -195,13 +200,17 @@ function ResponsiveDrawer(props) {
         </Paper>
         <Grid container spacing={2} style={{marginTop: '1rem'}}>
           {
-            data.map((element, i) => {
-              return (
-                <Grid item xs={12} sm={3} key={i}>
+            loading ? (
+              <span>loading...</span>
+            ) : (
+              data.map((element, i) => {
+                return (
+                  <Grid item xs={12} sm={3} key={i}>
                   <CardItem element={element}/>
                 </Grid>
-              ) 
-            })
+                ) 
+              })
+            )
           }
         </Grid>
         <Box display="flex" justifyContent="center" m={3}>
