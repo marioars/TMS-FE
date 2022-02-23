@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import AppBar from '@material-ui/core/AppBar';
 import CssBaseline from '@material-ui/core/CssBaseline';
 import Drawer from '@material-ui/core/Drawer';
@@ -21,6 +21,7 @@ import CardItem from '../components/CardItem';
 import { useSelector, useDispatch } from 'react-redux';
 import { fetchUsers } from '../store/actions';
 import Button from '@material-ui/core/Button';
+import ReactPaginate from 'react-paginate';
 
 const drawerWidth = 240;
 
@@ -62,19 +63,32 @@ function ResponsiveDrawer(props) {
   const classes = useStyles();
   const theme = useTheme();
   const [mobileOpen, setMobileOpen] = React.useState(false);
-  const users = useSelector(state => state.users)
   const dispatch = useDispatch()
+  const users = useSelector(state => state.users)
+  
+  const [offset, setOffset] = useState(0)
+  const [data, setData] = useState([])
+  const [perPage] = useState(4)
+  const [pageCount, setPageCount] = useState(0)
+  
+  const dataUser = () => {
+    const slice = users.slice(offset, offset + perPage)
+    const postData = slice
+    setData(postData)
+    setPageCount(Math.ceil(users.length / perPage))
+  }
+  const handlePageClick = (e) => {
+    const selectedPage = e.selected;
+    setOffset(selectedPage + 1);
+  };
 
   useEffect(() => {
     dispatch(fetchUsers())
   },[dispatch])
 
-  function handleNextPage() {
-    dispatch(fetchUsers())
-  }
-  function handlePrevPage() {
-    dispatch(fetchUsers())
-  }
+  useEffect(() => {
+    dataUser()
+  },[offset])
 
   const handleDrawerToggle = () => {
     setMobileOpen(!mobileOpen);
@@ -181,30 +195,30 @@ function ResponsiveDrawer(props) {
         </Paper>
         <Grid container spacing={2} style={{marginTop: '1rem'}}>
           {
-            users.map((user, i) => {
+            data.map((element, i) => {
               return (
                 <Grid item xs={12} sm={3} key={i}>
-                  <CardItem user={user}/>
+                  <CardItem element={element}/>
                 </Grid>
               ) 
             })
           }
         </Grid>
-        <Box display="flex" justifyContent="center" m={2}>
-          <Box m={2}>
-            <Button onClick={handlePrevPage}>
-              <Typography color="primary">
-                Previous page
-              </Typography>
-            </Button>
-          </Box>
-          <Box m={2}>
-            <Button onClick={handleNextPage}>
-              <Typography color="primary">
-                Next page
-              </Typography>
-            </Button>
-          </Box>
+        <Box display="flex" justifyContent="center" m={3}>
+          <ReactPaginate 
+            previousLabel={"prev"}
+            nextLabel={"next"}
+            breakLabel={"..."}
+            breakClassName={"break-me"}
+            pageCount={pageCount}
+            marginPagesDisplayed={2}
+            pageRangeDisplayed={4}
+            onPageChange={handlePageClick}
+            containerClassName={"pagination"}
+            subContainerClassName={"pages pagination"}
+            activeClassName={"active"}
+            style={{}}
+          />
         </Box>
       </main>
     </div>

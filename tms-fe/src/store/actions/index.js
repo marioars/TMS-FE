@@ -3,7 +3,7 @@ import axios from 'axios'
 
 export const fetchUsers = () => {
   return (dispatch) => {
-    axios.get(`${base_url}?page=1&results=4`)
+    axios.get(`${base_url}?page=1&results=28`)
     .then(({data}) => {
       dispatch({
         type: "SET_USERS",

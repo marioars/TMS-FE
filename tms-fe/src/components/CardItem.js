@@ -25,7 +25,7 @@ const bodFormatted = (input) => {
 }
 
 export default function CardItem(props) {
-  const { user } = props
+  const { element } = props
   const classes = useStyles();
 
   return (
@@ -37,13 +37,13 @@ export default function CardItem(props) {
           </IconButton>
         }
         title="Personnel ID"
-        subheader={`${user.id.value}`}
+        subheader={`${element.id.value}`}
       />
       <Divider />
-      {/* <Avatar alt="avatar" src={user.picture.large} /> */}
+      {/* <Avatar alt="avatar" src={element.picture.large} /> */}
       <CardMedia
         className={classes.media}
-        image={`${user.picture.large}`}
+        image={`${element.picture.large}`}
         title="Paella dish"
       />
       <CardContent>
@@ -51,25 +51,25 @@ export default function CardItem(props) {
           Name
         </Typography>
         <Typography variant="body1" color="primary" style={{ marginBottom: '1rem' }}>
-          {user.name.first} {user.name.last}
+          {element.name.first} {element.name.last}
         </Typography>
         <Typography variant="body1" color="primary" style={{ fontWeight: 'bold' }}>
           Telephone
         </Typography>
         <Typography variant="body1" color="primary" style={{ marginBottom: '1rem' }}>
-          {user.phone}
+          {element.phone}
         </Typography>
         <Typography variant="body1" color="primary" style={{ fontWeight: 'bold' }}>
           Birthday
         </Typography>
         <Typography variant="body1" color="primary" style={{ marginBottom: '1rem' }}>
-          {bodFormatted(user.dob.date)}
+          {bodFormatted(element.dob.date)}
         </Typography>
         <Typography variant="body1" color="primary" style={{ fontWeight: 'bold' }}>
           Email
         </Typography>
         <Typography variant="body1" color="primary" style={{ marginBottom: '1rem' }}>
-          {user.email}
+          {element.email}
         </Typography>
       </CardContent>
     </Card>
